@@ -1,0 +1,18 @@
+<form #f="ngForm" novalidate (ngSubmit)="onSubmit()">
+  <md-input name="name" type="text" id="name" required placeholder="Nome" #name="ngModel" [(ngModel)]="model.name">
+    <md-hint *ngIf="!name.valid && !name.pristine" class="md-warn" [hidden]="">Nome não deve estar vazio</md-hint>
+  </md-input>
+  <md-input name="cpf"  type="text" required placeholder="CPF" pattern="\d{3}\.?\d{3}\.?\d{3}-?\d{2}" #cpf="ngModel" [(ngModel)]="model.cpf">
+    <md-hint *ngIf="!cpf.valid && !cpf.pristine" class="md-warn" [hidden]="">CPF inválido</md-hint>
+  </md-input>
+  <md-input name="branch" type="text" required placeholder="Agência" pattern="\d{4}\-?\d{1}" #branch="ngModel" [(ngModel)]="model.branch">
+    <md-hint *ngIf="!branch.valid && !branch.pristine" class="md-warn" [hidden]="">Agência inválida</md-hint>
+  </md-input>
+  <md-input name="amount" type="number" required placeholder="Balanço inicial" min="0" #amount="ngModel" [(ngModel)]="model.amount">
+    <md-hint *ngIf="!amount.valid && !amount.pristine" class="md-warn" [hidden]="">Balanço inicial inválido</md-hint>
+  </md-input>
+  <md-input name="password" type="password" required placeholder="Senha (6 dígitos)" minlength="6" maxlength="6" #password="ngModel" [(ngModel)]="model.password">
+    <md-hint *ngIf="!password.valid && !password.pristine" class="md-warn" [hidden]="">Senha inválida</md-hint>
+  </md-input>
+  <button md-raised-button color="primary" [disabled]="!f.valid" >CADASTRAR</button>
+</form>

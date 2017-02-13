@@ -39,7 +39,7 @@ var BlueBankDB = (function () {
     function BlueBankDB() {
         this.config = {
             user: process.env.OPENSHIFT_POSTGRESQL_DB_USERNAME || 'acmt',
-            database: process.env.OPENSHIFT_POSTGRESQL_DB_DATABASE || 'ciclo',
+            database: process.env.OPENSHIFT_POSTGRESQL_DB_DATABASE || 'bluebank',
             password: process.env.OPENSHIFT_POSTGRESQL_DB_PASSWORD || 'secret',
             host: process.env.OPENSHIFT_POSTGRESQL_DB_HOST || 'localhost',
             port: process.env.OPENSHIFT_POSTGRESQL_DB_PORT || 5432,
@@ -76,6 +76,50 @@ var BlueBankDB = (function () {
                         returndata = { id: result.rows[0].id };
                         return [2 /*return*/, returndata];
                 }
+            });
+        });
+    };
+    /**
+     * @brief      Register a new bank account
+     *
+     * @param      cpf       The cpf
+     * @param      branch    The branch
+     * @param      amount    The amount
+     * @param      password  The password
+     *
+     * @return     { description_of_the_return_value }
+     */
+    BlueBankDB.prototype.register = function (name, cpf, branch, amount, password) {
+        return __awaiter(this, void 0, void 0, function () {
+            var client, result;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.pool.connect()];
+                    case 1:
+                        client = _a.sent();
+                        return [4 /*yield*/, client.query('INSERT INTO client (name, cpf, branch, amount, password) VALUES ($1, $2, $3, $4, $5) RETURNING id, account', [name, cpf, branch, amount, password])];
+                    case 2:
+                        result = _a.sent();
+                        client.release();
+                        console.log(result.rows[0]);
+                        return [2 /*return*/, result.rows[0]];
+                }
+            });
+        });
+    };
+    /**
+     * @brief      Make a transfer between different accounts
+     *
+     * @param      origin   The origin
+     * @param      destiny  The destiny
+     * @param      amount   The amount
+     *
+     * @return     true if success and false if failure
+     */
+    BlueBankDB.prototype.transfer = function (origin, destiny, amount) {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                return [2 /*return*/];
             });
         });
     };

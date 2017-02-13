@@ -30,7 +30,7 @@ function watch(){
   // gulp.watch(path.join(paths.html.src,'index.html')).on('change', s(index, browserSync.reload));
   // gulp.watch(path.join(paths.handler.src, 'handler.html')).on('change', s(handler, browserSync.reload));
   // gulp.watch(paths.css.src).on('change', s(styles_bundle, p(s(sw_fix, sw_gzip), index, styles)));
-  // gulp.watch(['dist/**/*.js','dist/**/*.html']).on('change', browserSync.reload);
+  gulp.watch(['dist/**/*.js','dist/**/*.html']).on('change', browserSync.reload);
 }
 
 // const sw       = s(sw_rollup);
@@ -43,7 +43,7 @@ const server   = s(server_bundle, server_run);
 // const styles   = p(styles_gzip, styles_sourcemap_gzip);
 // const gzip     = p(s(client_fix, client_gzip), s(sw_fix, sw_gzip), index, handler);
 // const all      = p(server, s(p(s(rollup, p(gzip, polyfills_post, styles), initSync), assets, fontawesome)), watch);
-const all = server;
+const all = p(server, watch, initSync);
 // export { client, client_w, server, server_w, polyfills, sw, rollup, gzip, all, styles_bundle, styles_gzip};
 export default all;
 

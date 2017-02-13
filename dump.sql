@@ -130,6 +130,7 @@ CREATE TABLE branch (
 
 CREATE TABLE client (
   id serial PRIMARY KEY NOT NULL,
+  name text NOT NULL,
   cpf char(9) NOT NULL ,
   branch integer REFERENCES branch(code) NOT NULL,
   account serial NOT NULL,
@@ -137,6 +138,7 @@ CREATE TABLE client (
   password password NOT NULL,
   lastlogindate timestamp without time zone,
   registerdate timestamp without time zone DEFAULT now() NOT NULL,
+  CONSTRAINT cpf_unique UNIQUE (cpf),
   CONSTRAINT account_unique UNIQUE (branch, account),
   CONSTRAINT login_check CHECK ((lastlogindate > registerdate))
 );
