@@ -10,7 +10,7 @@ export class BlueBankDB{
   constructor(){
     this.config = {
       user             : process.env.OPENSHIFT_POSTGRESQL_DB_USERNAME || 'acmt',   // env var: PGUSER
-      database         : process.env.OPENSHIFT_POSTGRESQL_DB_DATABASE || 'ciclo',  // env var: PGDATABASE
+      database         : process.env.OPENSHIFT_POSTGRESQL_DB_DATABASE || 'bluebank',  // env var: PGDATABASE
       password         : process.env.OPENSHIFT_POSTGRESQL_DB_PASSWORD || 'secret', // env var: PGPASSWORD
       host             : process.env.OPENSHIFT_POSTGRESQL_DB_HOST     || 'localhost',                        // Server hosting the postgres database
       port             : process.env.OPENSHIFT_POSTGRESQL_DB_PORT     || 5432,     // env var: PGPORT
@@ -41,5 +41,40 @@ export class BlueBankDB{
     client.release();
     let returndata = {id:result.rows[0].id};
     return returndata;
+  }
+
+  /**
+   * @brief      Register a new bank account
+   *
+   * @param      cpf       The cpf
+   * @param      branch    The branch
+   * @param      amount    The amount
+   * @param      password  The password
+   *
+   * @return     { description_of_the_return_value }
+   */
+  async register(name: string, cpf: string, branch: number, amount: number, password: string): Promise<any>{
+    let client:pg.Client = await this.pool.connect();
+    let result:pg.QueryResult = await client.query('INSERT INTO client (name, cpf, branch, amount, password) VALUES ($1, $2, $3, $4, $5) RETURNING id, account', [name, cpf, branch, amount, password]);
+    client.release();
+    console.log(result.rows[0]);
+    return result.rows[0];
+  }
+
+  /**
+   * @brief      Make a transfer between different accounts
+   *
+   * @param      origin   The origin
+   * @param      destiny  The destiny
+   * @param      amount   The amount
+   *
+   * @return     true if success and false if failure
+   */
+  async transfer(origin: number, destiny: number, amount: number): Promise<any>{
+    // let client:pg.Client = await this.pool.connect();
+    // let result:pg.QueryResult = await client.query(`BEGIN;UPDATE public.client SET amount = amount - $1 WHERE account= $2; publi COMMIT; INSERT INTO client (cpf, branch, amount, password) VALUES ($1, $2, $3, $4) RETURNING id, account
+    //   `, [data.cpf, data.branch, data.amount, data.password]);
+    // client.release();
+    // return result.rows[0];
   }
 }

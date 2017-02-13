@@ -1,9 +1,19 @@
 import * as Koa       from 'koa';
+import * as bodyparser from 'koa-bodyparser';
 import * as KoaRouter from 'koa-router';
 import * as jwt       from 'koa-jwt';
 import * as jw        from 'jsonwebtoken';
+import * as fs        from 'fs';
 import { BlueBankDB } from './db';
 
+function readFileThunk(src:string): Promise<string> {
+  return new Promise((resolve, reject) => {
+    fs.readFile(src, {'encoding': 'utf8'}, (err, data) => {
+      if(err) return reject(err);
+      resolve(data);
+    });
+  });
+}
 
 export class BlueBankRouter {
   unprotected:KoaRouter;
@@ -11,6 +21,25 @@ export class BlueBankRouter {
   constructor(private db: BlueBankDB, private pubKey: string, private privKey: string) {
     this.unprotected = new KoaRouter();
     this.protected = new KoaRouter();
+
+    var index = async (ctx:Koa.Context): Promise<any> => ctx.body = await readFileThunk(__dirname + '/../dist/index.html');
+    this.unprotected.get('/login'        , index)
+                    .get('/register'     , index)
+                    .get('/dashboard'    , index)
+                    .get('/transfer'     , index)
+                    .get('/transfer/new' , index)
+                    .get("/health", (ctx, next) => ctx.status = 200);
+
+
+    this.unprotected
+      .post('/api/client', async (ctx, next) => {
+        try{
+          let data = ctx.request.body;
+          ctx.body = await this.db.register(data.name, data.cpf, data.branch, data.amount,  data.password); 
+        }catch(e){
+          ctx.throw("Registration error", 401);
+        }
+      });
   }
 
   private getPayload(ctx:KoaRouter.IRouterContext){

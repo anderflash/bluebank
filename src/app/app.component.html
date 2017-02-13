@@ -1,3 +1,21 @@
-<h1>
-  {{title}}
-</h1>
+<header>
+  <md-toolbar color="primary">
+    <a routerLink="/"> <img src="assets/logo_toolbar.svg"></a>
+    <div *ngIf="!logged">
+      <button md-button routerLink="login">Entrar</button>
+      <button md-button routerLink="register">Cadastrar</button>  
+    </div>
+    <div *ngIf="logged">
+      <button md-button routerLink="dashboard">Inicio</button>
+      <button md-button (click)="logout">Sair</button>  
+    </div>
+  </md-toolbar>
+</header>
+
+<main>
+  <router-outlet></router-outlet>
+</main>
+
+<footer>
+  
+</footer>
