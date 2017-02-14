@@ -1,0 +1,12 @@
+:host{
+  display: flex;
+  flex-direction: column;
+  md-toolbar button{
+    width: 36px;
+  }
+  form{
+    display: flex;
+    flex-direction: column;
+    padding: 5px;
+  }
+}

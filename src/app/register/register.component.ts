@@ -21,7 +21,7 @@ export class RegisterComponent implements OnInit {
   onSubmit(){
     let branchStr:string = <any>this.model.branch;
     this.model.cpf = this.model.cpf.replace(/[\.\-]/,'').slice(0,9);
-    this.model.branch = parseInt(branchStr.slice(0,4));
+    this.model.branch = parseInt(branchStr);
 
     this.bb.register(this.model).then(data => {
       if(data.id){

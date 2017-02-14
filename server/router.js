@@ -169,6 +169,25 @@ var BlueBankRouter = (function () {
                     case 3: return [2 /*return*/];
                 }
             });
+        }); })
+            .post("/api/transfer", function (ctx, next) { return __awaiter(_this, void 0, void 0, function () {
+            var data, _a, e_5;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        _b.trys.push([0, 2, , 3]);
+                        data = ctx.request.body;
+                        _a = ctx;
+                        return [4 /*yield*/, this.db.transfer(this.getId(this.getPayload(ctx)), data.branch, data.account, data.amount)];
+                    case 1:
+                        _a.body = _b.sent();
+                        return [3 /*break*/, 3];
+                    case 2:
+                        e_5 = _b.sent();
+                        return [3 /*break*/, 3];
+                    case 3: return [2 /*return*/];
+                }
+            });
         }); });
     }
     BlueBankRouter.prototype.getPayload = function (ctx) {

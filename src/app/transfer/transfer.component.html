@@ -1,3 +1,15 @@
-<p>
-  transfer works!
-</p>
+<md-toolbar color="primary">
+  <h4>Nova Transferência</h4>
+</md-toolbar>
+<form #f="ngForm" novalidate (ngSubmit)="onSubmit()">
+  <md-input name="branch" type="text" required placeholder="Agência" pattern="\d{4}\-?\d{1}" #branch="ngModel" [(ngModel)]="model.branch">
+    <md-hint *ngIf="!branch.valid && !branch.pristine" class="md-warn" [hidden]="">Agência inválida</md-hint>
+  </md-input>
+  <md-input name="account" type="text" required placeholder="Número da Conta" pattern="\d{5}"#account="ngModel" [(ngModel)]="model.account">
+    <md-hint *ngIf="!account.valid && !account.pristine" class="md-warn" [hidden]="">Conta inválida</md-hint>
+  </md-input>
+  <md-input name="amount" type="number" required placeholder="Valor" min="0" #amount="ngModel" [(ngModel)]="model.amount">
+    <md-hint *ngIf="!amount.valid && !amount.pristine" class="md-warn" [hidden]="">Balanço inicial inválido</md-hint>
+  </md-input>
+  <button md-raised-button color="primary" [disabled]="!f.valid" >TRANSFERIR</button>
+</form>
