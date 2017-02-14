@@ -1,8 +1,8 @@
 <md-toolbar color="primary">
-  <h4>Transferências</h4>
-  <button md-button routerLink="/transfer/new"><i class="fa fa-plus"></i></button>
+  <h4>Transferências</h4>  
 </md-toolbar>
 <div class="lista">
+  <button md-raised-button color="primary" routerLink="/transfer/new">NOVA TRANSFERÊNCIA</button>
   <md-card *ngFor="let item of list">
     <div>Origem: {{item.oname}}</div>
     <div>Destino: {{item.dname}}</div>

@@ -114,10 +114,20 @@ var BlueBankDB = (function () {
      *
      * @return     true if success and false if failure
      */
-    BlueBankDB.prototype.transfer = function (origin, destiny, amount) {
+    BlueBankDB.prototype.transfer = function (id, branch, account, amount) {
         return __awaiter(this, void 0, void 0, function () {
+            var client, result;
             return __generator(this, function (_a) {
-                return [2 /*return*/];
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.pool.connect()];
+                    case 1:
+                        client = _a.sent();
+                        return [4 /*yield*/, client.query("\n      BEGIN;\n      WITH destiny as (SELECT id FROM public.client WHERE branch = $2 and account = $3)\n      UPDATE public.client SET amount = amount - $4 WHERE id = $1;\n      UPDATE public.client SET amount = amount + $4 WHERE id = destiny.id;\n      INSERT INTO public.transaction (origin, destiny, amount, tdate) VALUES ($1,destiny.id,$4,now()) RETURNING id;\n      COMMIT;\n      ", [id, branch, account, amount])];
+                    case 2:
+                        result = _a.sent();
+                        client.release();
+                        return [2 /*return*/, result.rows[0]];
+                }
             });
         });
     };

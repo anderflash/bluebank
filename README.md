@@ -1,17 +1,27 @@
 # Bluebank
 
+This is a project for the IBM application.
+
 This project was generated with [angular-cli](https://github.com/angular/angular-cli) version 1.0.0-beta.18.
 
+Install PostgreSQL, Node and the following Node Packages:
+
+~~~
+$ npm -g i angular-cli typescript@next gulpjs/gulp.git#4.0
+$ npm i
+~~~
+
 ## Development server
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
-## Code scaffolding
+Create a database called bluebank. Modify src/server/db.js according to database config.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive/pipe/service/class`.
+`cd` to project folder in terminal, inside postgresql (`psql bluebank`), type `\i dump.sql` and `\i db_test.sql`.
 
-## Build
+Run `gulp` to run server
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build.
+## Build and see the site
+
+Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build. Look at [http://localhost:3000](http://localhost:3000).
 
 ## Running unit tests
 

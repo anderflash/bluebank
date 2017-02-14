@@ -5,7 +5,7 @@
   <md-input name="cpf"  type="text" required placeholder="CPF" pattern="\d{3}\.?\d{3}\.?\d{3}-?\d{2}" #cpf="ngModel" [(ngModel)]="model.cpf">
     <md-hint *ngIf="!cpf.valid && !cpf.pristine" class="md-warn" [hidden]="">CPF inválido</md-hint>
   </md-input>
-  <md-input name="branch" type="text" required placeholder="Agência" pattern="\d{4}\-?\d{1}" #branch="ngModel" [(ngModel)]="model.branch">
+  <md-input name="branch" type="text" required placeholder="Agência" pattern="\d{4}" #branch="ngModel" [(ngModel)]="model.branch">
     <md-hint *ngIf="!branch.valid && !branch.pristine" class="md-warn" [hidden]="">Agência inválida</md-hint>
   </md-input>
   <md-input name="amount" type="number" required placeholder="Balanço inicial" min="0" #amount="ngModel" [(ngModel)]="model.amount">

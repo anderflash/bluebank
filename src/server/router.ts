@@ -70,6 +70,14 @@ export class BlueBankRouter {
         }catch(e){
           ctx.throw("Erro ao obter balanço",401);
         }
+      })
+      .post("/api/transfer", async (ctx, next) => {
+        try{
+          let data = ctx.request.body;
+          ctx.body = await this.db.transfer(this.getId(this.getPayload(ctx)), data.branch, data.account, data.amount);
+        }catch(e){
+
+        }
       });
   }
 

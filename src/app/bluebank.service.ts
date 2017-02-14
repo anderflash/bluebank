@@ -3,6 +3,7 @@ import { Http } from '@angular/http';
 
 import { Observable } from 'rxjs';
 import { RegisterModel } from './register.model';
+import { TransferModel } from './transfer.model';
 
 @Injectable()
 export class BluebankService {
@@ -32,23 +33,18 @@ export class BluebankService {
     console.log(localStorage.getItem('currentUser'));
     return data;
   }
-
-  get authenticated() {
-    return this.currentUser != null;
+  private addJWT(object: any): any{
+    if(this.currentUser){
+      Object.assign(object,{'Authorization':'Bearer ' + this.currentUser.token});
+    }
+    return object;
   }
-
-  get amount () {
-    return this.get('api/amount', this.jsonJWT())
-      .then(data => this.status(data))
-      .then(data => this.json(data));
+  private jsonJWT(){
+    return this.addJWT(this.addJson({}));
   }
-
-  get transferList() {
-    return this.get('api/transfer', this.jsonJWT())
-      .then(data => this.status(data))
-      .then(data => this.json(data));
+  private addJson(object: any): any{
+    return Object.assign(object,{'Content-Type':'application/json', 'Accept': 'application/json'});
   }
-
   /**
    * @brief      Just a wrapper for Fetch API post request
    *
@@ -73,6 +69,24 @@ export class BluebankService {
     return fetch(url, {method: 'GET', headers: headers})
   }
 
+
+  get authenticated() {
+    return this.currentUser != null;
+  }
+
+  get amount () {
+    return this.get('api/amount', this.jsonJWT())
+      .then(data => this.status(data))
+      .then(data => this.json(data));
+  }
+
+  get transferList() {
+    return this.get('api/transfer', this.jsonJWT())
+      .then(data => this.status(data))
+      .then(data => this.json(data));
+  }
+
+  
   /**
    * @brief      Registering the user
    *
@@ -114,18 +128,11 @@ export class BluebankService {
     this.currentUser = null;
   }
 
-  private addJWT(object: any): any{
-    if(this.currentUser){
-      Object.assign(object,{'Authorization':'Bearer ' + this.currentUser.token});
-    }
-    return object;
+  transfer(model: TransferModel): Promise<any>{
+    return this.post('api/transfer', model, this.jsonJWT())
+      .then(data => this.status(data))
+      .then(data => this.json(data));
   }
-  private jsonJWT(){
-    return this.addJWT(this.addJson({}));
-  }
-  private addJson(object: any): any{
-    return Object.assign(object,{'Content-Type':'application/json', 'Accept': 'application/json'});
-  }
-
+  
   
 }

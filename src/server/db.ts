@@ -68,12 +68,18 @@ export class BlueBankDB{
    *
    * @return     true if success and false if failure
    */
-  async transfer(origin: number, destiny: number, amount: number): Promise<any>{
-    // let client:pg.Client = await this.pool.connect();
-    // let result:pg.QueryResult = await client.query(`BEGIN;UPDATE public.client SET amount = amount - $1 WHERE account= $2; publi COMMIT; INSERT INTO client (cpf, branch, amount, password) VALUES ($1, $2, $3, $4) RETURNING id, account
-    //   `, [data.cpf, data.branch, data.amount, data.password]);
-    // client.release();
-    // return result.rows[0];
+  async transfer(id: number, branch: number, account: number, amount: number): Promise<any>{
+    let client:pg.Client = await this.pool.connect();
+    let result:pg.QueryResult = await client.query(`
+      BEGIN;
+      WITH destiny as (SELECT id FROM public.client WHERE branch = $2 and account = $3)
+      UPDATE public.client SET amount = amount - $4 WHERE id = $1;
+      UPDATE public.client SET amount = amount + $4 WHERE id = destiny.id;
+      INSERT INTO public.transaction (origin, destiny, amount, tdate) VALUES ($1,destiny.id,$4,now()) RETURNING id;
+      COMMIT;
+      `, [id, branch, account, amount]);
+    client.release();
+    return result.rows[0];
   }
 
   async getAmount(id: number): Promise<number>{
