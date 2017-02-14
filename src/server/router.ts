@@ -56,6 +56,13 @@ export class BlueBankRouter {
         }catch(e){
           ctx.throw("login não realizado", 401);
         }
+      })
+      .get("/api/amount", async (ctx, next) => {
+        try{
+          ctx.body = await this.db.getAmount(this.getId(this.getPayload(ctx)));
+        }catch(e){
+          ctx.throw("Erro ao obter balanço",401);
+        }
       });
   }
 
@@ -73,6 +80,10 @@ export class BlueBankRouter {
     } else {
       throw "Credenciais mal-formados";
     }
+  }
+
+  private getId(payload: any){
+    return payload.sub;
   }
 
   private sign(payload: Object){

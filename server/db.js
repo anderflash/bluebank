@@ -121,6 +121,23 @@ var BlueBankDB = (function () {
             });
         });
     };
+    BlueBankDB.prototype.getAmount = function (id) {
+        return __awaiter(this, void 0, void 0, function () {
+            var client, result;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.pool.connect()];
+                    case 1:
+                        client = _a.sent();
+                        return [4 /*yield*/, client.query("SELECT amount from public.client where id = $1", [id])];
+                    case 2:
+                        result = _a.sent();
+                        client.release();
+                        return [2 /*return*/, result.rows[0]];
+                }
+            });
+        });
+    };
     return BlueBankDB;
 }());
 exports.BlueBankDB = BlueBankDB;

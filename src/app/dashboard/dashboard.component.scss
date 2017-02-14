@@ -1,0 +1,19 @@
+:host{
+  display: flex;
+  flex-direction: column;
+  padding: 5px;
+  > div{
+    margin-bottom: 5px;
+  }
+}
+.basic-info{
+  display: flex;
+  flex-direction: row;
+  align-items:center;
+}
+.photo{
+  width: 64px;
+  height: 64px;
+  border: 1px solid white;
+  border-radius: 50%;
+}
