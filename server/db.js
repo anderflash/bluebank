@@ -57,24 +57,22 @@ var BlueBankDB = (function () {
             console.error('idle client error', err.message, err.stack);
         });
     }
-    BlueBankDB.prototype.validateLogin = function (branch, account, password) {
+    BlueBankDB.prototype.login = function (cpf, password) {
         return __awaiter(this, void 0, void 0, function () {
-            var client, result, returndata;
+            var client, result;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0: return [4 /*yield*/, this.pool.connect()];
                     case 1:
                         client = _a.sent();
-                        return [4 /*yield*/, client.query('UPDATE public.client SET lastlogindate=now() WHERE branch = $1 AND account = $2 AND password = $3 RETURNING id', [branch, account, password])];
+                        console.log(cpf, password);
+                        return [4 /*yield*/, client.query('UPDATE public.client SET lastlogindate=now() WHERE cpf = $1 AND password = $2 RETURNING id, account, branch, name, registerdate', [cpf, password])];
                     case 2:
                         result = _a.sent();
-                        if (result.rows.length == 0) {
-                            client.release();
-                            throw Error("Usuário e senha não existem");
-                        }
                         client.release();
-                        returndata = { id: result.rows[0].id };
-                        return [2 /*return*/, returndata];
+                        if (result.rows.length == 0)
+                            throw Error("Usuário e senha não existem");
+                        return [2 /*return*/, result.rows[0]];
                 }
             });
         });

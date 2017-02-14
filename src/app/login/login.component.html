@@ -1,3 +1,9 @@
-<p>
-  login works!
-</p>
+<form #f="ngForm" novalidate (ngSubmit)="onSubmit()">
+  <md-input name="cpf"  type="text" required placeholder="CPF" pattern="\d{3}\.?\d{3}\.?\d{3}-?\d{2}" #cpf="ngModel" [(ngModel)]="model.cpf">
+    <md-hint *ngIf="!cpf.valid && !cpf.pristine" class="md-warn" [hidden]="">CPF inválido</md-hint>
+  </md-input>
+  <md-input name="password" type="password" required placeholder="Senha (6 dígitos)" minlength="6" maxlength="6" #password="ngModel" [(ngModel)]="model.password">
+    <md-hint *ngIf="!password.valid && !password.pristine" class="md-warn" [hidden]="">Senha inválida</md-hint>
+  </md-input>
+  <button md-raised-button color="primary" [disabled]="!f.valid" >ENTRAR</button>
+</form>
