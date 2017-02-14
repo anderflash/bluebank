@@ -75,4 +75,11 @@ export class BlueBankDB{
     // client.release();
     // return result.rows[0];
   }
+
+  async getAmount(id: number): Promise<number>{
+    let client:pg.Client = await this.pool.connect();
+    let result:pg.QueryResult = await client.query(`SELECT amount from public.client where id = $1`,[id]);
+    client.release();
+    return result.rows[0];
+  }
 }

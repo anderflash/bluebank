@@ -27,7 +27,7 @@ export class BluebankService {
 
   private storage(data:any):any {
     console.log(data);
-    localStorage.setItem('currentUser', JSON.stringify({id: data.id, branch: data.branch, cpf: data.cpf, account: data.account, token:data.token}));
+    localStorage.setItem('currentUser', JSON.stringify({id: data.id, branch: data.branch, cpf: data.cpf, account: data.account, name: data.name, registerdate: data.registerdate, token:data.token}));
     this.currentUser = data;
     console.log(localStorage.getItem('currentUser'));
     return data;
@@ -35,6 +35,12 @@ export class BluebankService {
 
   get authenticated() {
     return this.currentUser != null;
+  }
+
+  get amount () {
+    return this.get('api/amount', this.jsonJWT())
+      .then(data => this.status(data))
+      .then(data => this.json(data));
   }
 
   /**

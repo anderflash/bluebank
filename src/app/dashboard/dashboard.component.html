@@ -1,3 +1,13 @@
-<p>
-  dashboard works!
-</p>
+<div class="basic-info">
+  <img class="photo" src="assets/user-none.jpg">
+  <div class="content">
+    <h4>{{model.name}}</h4>
+    <p>Membro desde {{model.registerdate | date: 'dd/mm/yyyy'}}</p>  
+  </div>
+</div>
+
+<div class="amount">
+  <h4>Balanço atual: R$ {{ model.amount | number}}</h4>
+</div>
+
+<button md-raised-button color="primary" routerLink="/transfer">TRANFERÊNCIAS</button>
