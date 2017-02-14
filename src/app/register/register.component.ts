@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { MdSnackBar } from '@angular/material';
+
 import { BluebankService } from '../bluebank.service';
 import { RegisterModel } from '../register.model';
-import { MdSnackBar } from '@angular/material';
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',

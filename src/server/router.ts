@@ -14,6 +14,11 @@ function readFileThunk(src:string): Promise<string> {
     });
   });
 }
+async function validatePassword (ctx, next): Promise<any>{
+  let password:string = ctx.query.password || ctx.request.body.password;
+  if(!password || password.length != 6) return ctx.throw("Password inválido", 400);
+  await next();
+};
 
 export class BlueBankRouter {
   unprotected:KoaRouter;
@@ -39,6 +44,18 @@ export class BlueBankRouter {
         }catch(e){
           ctx.throw("Registration error", 401);
         }
+      })
+      .post("/api/login", validatePassword, async (ctx, next) => {
+        let data  = ctx.request.body;
+        let result;
+        try{
+          result  = await this.db.login(data.cpf, data.password);
+          result.token = this.sign({sub:result.id, cpf: data.cpf, account: data.account, branch: data.branch});
+          console.log(result);
+          ctx.body = result;
+        }catch(e){
+          ctx.throw("login não realizado", 401);
+        }
       });
   }
 
@@ -59,7 +76,10 @@ export class BlueBankRouter {
   }
 
   private sign(payload: Object){
-
+    return jw.sign(payload, this.privKey, {
+      algorithm: 'RS256', 
+      expiresIn:'7d'
+    });
   }
 
   use(app:Koa){

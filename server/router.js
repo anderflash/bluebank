@@ -47,6 +47,24 @@ function readFileThunk(src) {
         });
     });
 }
+function validatePassword(ctx, next) {
+    return __awaiter(this, void 0, void 0, function () {
+        var password;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    password = ctx.query.password || ctx.request.body.password;
+                    if (!password || password.length != 6)
+                        return [2 /*return*/, ctx.throw("Password inválido", 400)];
+                    return [4 /*yield*/, next()];
+                case 1:
+                    _a.sent();
+                    return [2 /*return*/];
+            }
+        });
+    });
+}
+;
 var BlueBankRouter = (function () {
     function BlueBankRouter(db, pubKey, privKey) {
         var _this = this;
@@ -89,6 +107,30 @@ var BlueBankRouter = (function () {
                     case 3: return [2 /*return*/];
                 }
             });
+        }); })
+            .post("/api/login", validatePassword, function (ctx, next) { return __awaiter(_this, void 0, void 0, function () {
+            var data, result, e_2;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        data = ctx.request.body;
+                        _a.label = 1;
+                    case 1:
+                        _a.trys.push([1, 3, , 4]);
+                        return [4 /*yield*/, this.db.login(data.cpf, data.password)];
+                    case 2:
+                        result = _a.sent();
+                        result.token = this.sign({ sub: result.id, cpf: data.cpf, account: data.account, branch: data.branch });
+                        console.log(result);
+                        ctx.body = result;
+                        return [3 /*break*/, 4];
+                    case 3:
+                        e_2 = _a.sent();
+                        ctx.throw("login não realizado", 401);
+                        return [3 /*break*/, 4];
+                    case 4: return [2 /*return*/];
+                }
+            });
         }); });
     }
     BlueBankRouter.prototype.getPayload = function (ctx) {
@@ -107,6 +149,10 @@ var BlueBankRouter = (function () {
         }
     };
     BlueBankRouter.prototype.sign = function (payload) {
+        return jw.sign(payload, this.privKey, {
+            algorithm: 'RS256',
+            expiresIn: '7d'
+        });
     };
     BlueBankRouter.prototype.use = function (app) {
         app.use(this.unprotected.routes());

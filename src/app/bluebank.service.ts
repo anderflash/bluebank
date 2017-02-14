@@ -6,10 +6,12 @@ import { RegisterModel } from './register.model';
 
 @Injectable()
 export class BluebankService {
-
+  
   currentUser: any;
 
-  constructor(private http:Http) { }
+  constructor(private http:Http) { 
+    this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
+  }
 
   private status(response: Response): Response | Promise<never> {
     if (response.status >= 200 && response.status < 300) {
@@ -24,9 +26,15 @@ export class BluebankService {
   }
 
   private storage(data:any):any {
-    localStorage.setItem('currentUser', JSON.stringify({id: data.id, branch: data.branch, account: data.account, token:data.token}));
+    console.log(data);
+    localStorage.setItem('currentUser', JSON.stringify({id: data.id, branch: data.branch, cpf: data.cpf, account: data.account, token:data.token}));
     this.currentUser = data;
+    console.log(localStorage.getItem('currentUser'));
     return data;
+  }
+
+  get authenticated() {
+    return this.currentUser != null;
   }
 
   /**
@@ -76,11 +84,11 @@ export class BluebankService {
    *
    * @return     { description_of_the_return_value }
    */
-  login(branch: number, account: number, password: string): Promise<any> {
+  login(cpf: string, password: string): Promise<any> {
     let obj = this.addJson({});
-    return fetch('/api/login', { method: 'POST', headers: obj, body: JSON.stringify({ branch: branch, account: account, password: password }) })
+    return fetch('/api/login', { method: 'POST', headers: obj, body: JSON.stringify({ cpf: cpf, password: password }) })
       .then(data => this.status(data))
-      .then(data => this.json(Object.apply(data,{branch:branch, account: account})))
+      .then(data => this.json(data))
       .then(data => this.storage(data));
   }
 

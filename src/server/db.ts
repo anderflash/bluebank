@@ -29,18 +29,16 @@ export class BlueBankDB{
     });
   }
 
-  async validateLogin(branch: number, account:number, password:string): Promise<any>{
+  async login(cpf:string, password:string): Promise<any>{
     let client:pg.Client;
     let result:pg.QueryResult;
     client = await this.pool.connect();
-    result = await client.query('UPDATE public.client SET lastlogindate=now() WHERE branch = $1 AND account = $2 AND password = $3 RETURNING id', [branch, account, password]);
-    if(result.rows.length == 0){
-      client.release();
-      throw Error("Usuário e senha não existem");
-    } 
+    console.log(cpf, password);
+    result = await client.query('UPDATE public.client SET lastlogindate=now() WHERE cpf = $1 AND password = $2 RETURNING id, account, branch, name, registerdate', [cpf, password]);
     client.release();
-    let returndata = {id:result.rows[0].id};
-    return returndata;
+    if(result.rows.length == 0)
+      throw Error("Usuário e senha não existem");
+    return result.rows[0];
   }
 
   /**
