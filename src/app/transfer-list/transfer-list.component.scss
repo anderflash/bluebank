@@ -1,0 +1,12 @@
+:host{
+  md-toolbar{
+    justify-content:center;
+  }
+}
+.lista{
+  padding: 5px;
+  md-card{
+    cursor: pointer;
+    user-select: none;
+  }
+}

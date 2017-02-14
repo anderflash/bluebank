@@ -1,3 +1,12 @@
-<p>
-  transfer-list works!
-</p>
+<md-toolbar color="primary">
+  <h4>Transferências</h4>
+  <button md-button routerLink="/transfer/new"><i class="fa fa-plus"></i></button>
+</md-toolbar>
+<div class="lista">
+  <md-card *ngFor="let item of list">
+    <div>Origem: {{item.oname}}</div>
+    <div>Destino: {{item.dname}}</div>
+    <div>Valor: {{item.amount}}</div>
+    <div>Data: {{item.tdate}}</div>
+  </md-card>
+</div>

@@ -138,6 +138,23 @@ var BlueBankDB = (function () {
             });
         });
     };
+    BlueBankDB.prototype.getTransferList = function (id) {
+        return __awaiter(this, void 0, void 0, function () {
+            var client, result;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.pool.connect()];
+                    case 1:
+                        client = _a.sent();
+                        return [4 /*yield*/, client.query("SELECT t.*, co.name as oname, co.branch as obranch, co.account as oaccount, cd.name as dname, cd.branch as dbranch, cd.account as daccount from public.transaction t JOIN public.client co ON co.id = t.origin JOIN public.client cd ON cd.id = t.destiny where origin = $1 OR destiny = $1", [id])];
+                    case 2:
+                        result = _a.sent();
+                        client.release();
+                        return [2 /*return*/, result.rows];
+                }
+            });
+        });
+    };
     return BlueBankDB;
 }());
 exports.BlueBankDB = BlueBankDB;
