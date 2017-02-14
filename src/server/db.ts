@@ -82,4 +82,10 @@ export class BlueBankDB{
     client.release();
     return result.rows[0];
   }
+  async getTransferList(id: number): Promise<any[]>{
+    let client:pg.Client = await this.pool.connect();
+    let result:pg.QueryResult = await client.query(`SELECT t.*, co.name as oname, co.branch as obranch, co.account as oaccount, cd.name as dname, cd.branch as dbranch, cd.account as daccount from public.transaction t JOIN public.client co ON co.id = t.origin JOIN public.client cd ON cd.id = t.destiny where origin = $1 OR destiny = $1`,[id]);
+    client.release();
+    return result.rows;
+  }
 }

@@ -43,6 +43,12 @@ export class BluebankService {
       .then(data => this.json(data));
   }
 
+  get transferList() {
+    return this.get('api/transfer', this.jsonJWT())
+      .then(data => this.status(data))
+      .then(data => this.json(data));
+  }
+
   /**
    * @brief      Just a wrapper for Fetch API post request
    *

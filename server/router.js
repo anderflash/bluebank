@@ -150,6 +150,25 @@ var BlueBankRouter = (function () {
                     case 3: return [2 /*return*/];
                 }
             });
+        }); })
+            .get("/api/transfer", function (ctx, next) { return __awaiter(_this, void 0, void 0, function () {
+            var _a, e_4;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        _b.trys.push([0, 2, , 3]);
+                        _a = ctx;
+                        return [4 /*yield*/, this.db.getTransferList(this.getId(this.getPayload(ctx)))];
+                    case 1:
+                        _a.body = _b.sent();
+                        return [3 /*break*/, 3];
+                    case 2:
+                        e_4 = _b.sent();
+                        ctx.throw("Erro ao obter balanço", 401);
+                        return [3 /*break*/, 3];
+                    case 3: return [2 /*return*/];
+                }
+            });
         }); });
     }
     BlueBankRouter.prototype.getPayload = function (ctx) {
